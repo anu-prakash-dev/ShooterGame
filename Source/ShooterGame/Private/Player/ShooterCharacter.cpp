@@ -65,6 +65,7 @@ AShooterCharacter::AShooterCharacter(const FObjectInitializer& ObjectInitializer
 	bWantsToRun = false;
 	bWantsToFire = false;
 	LowHealthPercentage = 0.5f;
+	WeaponIndex = 0;
 
 	BaseTurnRate = 45.f;
 	BaseLookUpRate = 45.f;
@@ -994,6 +995,7 @@ void AShooterCharacter::OnNextWeapon()
 		{
 			const int32 CurrentWeaponIdx = Inventory.IndexOfByKey(CurrentWeapon);
 			AShooterWeapon* NextWeapon = Inventory[(CurrentWeaponIdx + 1) % Inventory.Num()];
+			SetWeaponIndex((CurrentWeaponIdx + 1) % Inventory.Num());
 			EquipWeapon(NextWeapon);
 		}
 	}
@@ -1008,6 +1010,7 @@ void AShooterCharacter::OnPrevWeapon()
 		{
 			const int32 CurrentWeaponIdx = Inventory.IndexOfByKey(CurrentWeapon);
 			AShooterWeapon* PrevWeapon = Inventory[(CurrentWeaponIdx - 1 + Inventory.Num()) % Inventory.Num()];
+			SetWeaponIndex((CurrentWeaponIdx - 1 + Inventory.Num()) % Inventory.Num());
 			EquipWeapon(PrevWeapon);
 		}
 	}
@@ -1330,6 +1333,16 @@ int AShooterCharacter::GetCurrentWeaponClip() const
 	}
 
 	return 0;
+}
+
+void AShooterCharacter::SetWeaponIndex(int index)
+{
+	WeaponIndex = index;
+}
+
+int AShooterCharacter::GetWeaponIndex() const
+{
+	return WeaponIndex;
 }
 
 bool AShooterCharacter::IsAlive() const

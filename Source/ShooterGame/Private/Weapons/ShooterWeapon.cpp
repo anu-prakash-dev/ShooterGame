@@ -990,3 +990,8 @@ float AShooterWeapon::GetEquipDuration() const
 {
 	return EquipDuration;
 }
+
+FText AShooterWeapon::GetWeaponName() const
+{
+	return WeaponName;
+}

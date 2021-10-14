@@ -200,6 +200,14 @@ class AShooterWeapon : public AActor
 	UFUNCTION(BlueprintCallable, Category="Game|Weapon")
 	class AShooterCharacter* GetPawnOwner() const;
 
+	/** weapon name */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=HUD)
+	FText WeaponName;
+
+	/** get weapon name */
+	UFUNCTION(BlueprintCallable, Category=HUD)
+	FText GetWeaponName() const;
+
 	/** icon displayed on the HUD when weapon is equipped as primary */
 	UPROPERTY(EditDefaultsOnly, Category=HUD)
 	FCanvasIcon PrimaryIcon;

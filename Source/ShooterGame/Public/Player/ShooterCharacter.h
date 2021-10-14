@@ -221,6 +221,7 @@ class AShooterCharacter : public ACharacter
 	FName GetWeaponAttachPoint() const;
 
 	/** get total number of inventory items */
+	UFUNCTION(BlueprintCallable, Category = Widgets)
 	int32 GetInventoryCount() const;
 
 	/**
@@ -228,6 +229,7 @@ class AShooterCharacter : public ACharacter
 	*
 	* @param Index Inventory index
 	*/
+	UFUNCTION(BlueprintCallable, Category = Widgets)
 	class AShooterWeapon* GetInventoryWeapon(int32 index) const;
 
 	/** get weapon taget modifier speed	*/
@@ -268,13 +270,21 @@ class AShooterCharacter : public ACharacter
 	float GetPercentageHealth() const;
 
 	UFUNCTION(BlueprintCallable, Category = Widgets)
-	int GetKillsState() const;
+	int32 GetKillsState() const;
 
 	UFUNCTION(BlueprintCallable, Category = Widgets)
 	int GetCurrentWeaponAmmo() const;
 
 	UFUNCTION(BlueprintCallable, Category = Widgets)
 	int GetCurrentWeaponClip() const;
+
+	int WeaponIndex;
+
+	UFUNCTION(BlueprintCallable, Category = Widgets)
+	void SetWeaponIndex(int index);
+
+	UFUNCTION(BlueprintCallable, Category = Widgets)
+	int GetWeaponIndex() const;
 
 	///////////////////////////////////
 
