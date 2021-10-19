@@ -46,6 +46,7 @@ void AShooterAIController::OnUnPossess()
 	Super::OnUnPossess();
 
 	BehaviorComp->StopTree();
+
 }
 
 void AShooterAIController::BeginInactiveState()
@@ -61,7 +62,7 @@ void AShooterAIController::BeginInactiveState()
 
 void AShooterAIController::Respawn()
 {
-	GetWorld()->GetAuthGameMode()->RestartPlayer(this);
+	//GetWorld()->GetAuthGameMode()->RestartPlayer(this);
 }
 
 void AShooterAIController::FindClosestEnemy()

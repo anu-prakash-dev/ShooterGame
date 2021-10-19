@@ -113,6 +113,7 @@ class AShooterCharacter : public ACharacter
 	/** [server + local] change running state */
 	void SetRunning(bool bNewRunning, bool bToggle);
 
+
 	//////////////////////////////////////////////////////////////////////////
 	// Animations
 
@@ -178,9 +179,11 @@ class AShooterCharacter : public ACharacter
 	void OnStopTargeting();
 
 	/** player pressed next weapon action */
+	UFUNCTION(BlueprintCallable, Category=Player)
 	void OnNextWeapon();
 
 	/** player pressed prev weapon action */
+	UFUNCTION(BlueprintCallable, Category = Player)
 	void OnPrevWeapon();
 
 	/** player pressed reload action */
@@ -259,6 +262,11 @@ class AShooterCharacter : public ACharacter
 	/** get max health */
 	int32 GetMaxHealth() const;
 
+	void SwitchCamera();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Player)
+	bool bFirstPerson;
+
 
 	///////////// WIDGETS /////////////
 
@@ -285,6 +293,12 @@ class AShooterCharacter : public ACharacter
 
 	UFUNCTION(BlueprintCallable, Category = Widgets)
 	int GetWeaponIndex() const;
+
+	UFUNCTION(BlueprintCallable, Category = Player)
+	void SelectWeapon(int32 index);
+
+	UFUNCTION(BlueprintCallable, Category = Player)
+	TArray<class AShooterWeapon*> GetInventory() const;
 
 	///////////////////////////////////
 
@@ -430,6 +444,8 @@ private:
 
 public:
 
+
+
 	/** Identifies if pawn is in its dying state */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Health)
 	uint32 bIsDying : 1;
@@ -481,6 +497,8 @@ protected:
 	/** play hit or death on client */
 	UFUNCTION()
 	void OnRep_LastTakeHitInfo();
+
+
 
 	//////////////////////////////////////////////////////////////////////////
 	// Inventory

@@ -47,7 +47,7 @@ AShooterCharacter::AShooterCharacter(const FObjectInitializer& ObjectInitializer
 	Mesh1P->SetCollisionResponseToAllChannels(ECR_Ignore);
 
 	GetMesh()->bOnlyOwnerSee = false;
-	GetMesh()->bOwnerNoSee = true;
+	GetMesh()->bOwnerNoSee = false;
 	GetMesh()->bReceivesDecals = false;
 	GetMesh()->SetCollisionObjectType(ECC_Pawn);
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
@@ -66,6 +66,8 @@ AShooterCharacter::AShooterCharacter(const FObjectInitializer& ObjectInitializer
 	bWantsToFire = false;
 	LowHealthPercentage = 0.5f;
 	WeaponIndex = 0;
+
+	bFirstPerson = true;
 
 	BaseTurnRate = 45.f;
 	BaseLookUpRate = 45.f;
@@ -184,8 +186,6 @@ bool AShooterCharacter::IsEnemyFor(AController* TestPC) const
 
 void AShooterCharacter::UpdatePawnMeshes()
 {
-	bool const bFirstPerson = IsFirstPerson();
-
 	Mesh1P->VisibilityBasedAnimTickOption = !bFirstPerson ? EVisibilityBasedAnimTickOption::OnlyTickPoseWhenRendered : EVisibilityBasedAnimTickOption::AlwaysTickPoseAndRefreshBones;
 	Mesh1P->SetOwnerNoSee(!bFirstPerson);
 
@@ -214,7 +214,7 @@ void AShooterCharacter::OnCameraUpdate(const FVector& CameraLocation, const FRot
 
 	// Mesh rotating code expect uniform scale in LocalToWorld matrix
 
-	const FRotator RotCameraPitch(CameraRotation.Pitch, 0.0f, 0.0f);
+	const FRotator RotCameraPitch(CameraRotation.Pitch, 0.0f,0.0f);
 	const FRotator RotCameraYaw(0.0f, CameraRotation.Yaw, 0.0f);
 
 	const FMatrix LeveledCameraLS = FRotationTranslationMatrix(RotCameraYaw, CameraLocation) * LocalToWorld.Inverse();
@@ -875,9 +875,6 @@ void AShooterCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerI
 	PlayerInputComponent->BindAction("Targeting", IE_Pressed, this, &AShooterCharacter::OnStartTargeting);
 	PlayerInputComponent->BindAction("Targeting", IE_Released, this, &AShooterCharacter::OnStopTargeting);
 
-	PlayerInputComponent->BindAction("NextWeapon", IE_Pressed, this, &AShooterCharacter::OnNextWeapon);
-	PlayerInputComponent->BindAction("PrevWeapon", IE_Pressed, this, &AShooterCharacter::OnPrevWeapon);
-
 	PlayerInputComponent->BindAction("Reload", IE_Pressed, this, &AShooterCharacter::OnReload);
 
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AShooterCharacter::OnStartJump);
@@ -886,6 +883,8 @@ void AShooterCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerI
 	PlayerInputComponent->BindAction("Run", IE_Pressed, this, &AShooterCharacter::OnStartRunning);
 	PlayerInputComponent->BindAction("RunToggle", IE_Pressed, this, &AShooterCharacter::OnStartRunningToggle);
 	PlayerInputComponent->BindAction("Run", IE_Released, this, &AShooterCharacter::OnStopRunning);
+
+	PlayerInputComponent->BindAction("ToggleView", IE_Pressed, this, &AShooterCharacter::SwitchCamera);
 }
 
 
@@ -1190,7 +1189,6 @@ void AShooterCharacter::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > &
 	// everyone except local owner: flag change is locally instigated
 	DOREPLIFETIME_CONDITION(AShooterCharacter, bIsTargeting, COND_SkipOwner);
 	DOREPLIFETIME_CONDITION(AShooterCharacter, bWantsToRun, COND_SkipOwner);
-
 	DOREPLIFETIME_CONDITION(AShooterCharacter, LastTakeHitInfo, COND_Custom);
 
 	// everyone
@@ -1345,6 +1343,17 @@ int AShooterCharacter::GetWeaponIndex() const
 	return WeaponIndex;
 }
 
+void AShooterCharacter::SelectWeapon(int32 index)
+{
+	SetWeaponIndex(index);
+	EquipWeapon(Inventory[index]);
+}
+
+TArray<class AShooterWeapon*> AShooterCharacter::GetInventory() const
+{
+	return Inventory;
+}
+
 bool AShooterCharacter::IsAlive() const
 {
 	return Health > 0;
@@ -1379,3 +1388,10 @@ void AShooterCharacter::BuildPauseReplicationCheckPoints(TArray<FVector>& Releva
 	RelevancyCheckPoints.Add(FVector(BoundingBox.Max.X - XDiff, BoundingBox.Max.Y - YDiff, BoundingBox.Max.Z));
 	RelevancyCheckPoints.Add(BoundingBox.Max);
 }
+
+
+void AShooterCharacter::SwitchCamera() 
+{ 
+	UpdatePawnMeshes();
+
+}   

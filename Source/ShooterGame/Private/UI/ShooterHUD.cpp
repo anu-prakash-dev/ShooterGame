@@ -584,14 +584,14 @@ void AShooterHUD::DrawHUD()
 		else
 		{
 			// respawn
-			FString Text = LOCTEXT("WaitingForRespawn", "WAITING FOR RESPAWN").ToString();
+			/*FString Text = LOCTEXT("WaitingForRespawn", "WAITING FOR RESPAWN").ToString();
 			FCanvasTextItem TextItem( FVector2D::ZeroVector, FText::GetEmpty(), BigFont, HUDDark );
 			TextItem.EnableShadow( FLinearColor::Black );
 			TextItem.Text = FText::FromString( Text );
 			TextItem.Scale = FVector2D( TextScale * ScaleUI, TextScale * ScaleUI );
 			TextItem.FontRenderInfo = ShadowedFont;
 			TextItem.SetColor(HUDLight);
-			AddMatchInfoString(TextItem);
+			AddMatchInfoString(TextItem);*/
 		}
 
 	//	DrawDeathMessages();
@@ -601,23 +601,23 @@ void AShooterHUD::DrawHUD()
 		// Draw any recent killed player - cache the used Y coord for later when we draw the large onscreen messages.
 		MessageOffset = DrawRecentlyKilledPlayer();
 
-		// No ammo message if required
-		const float CurrentTime = GetWorld()->GetTimeSeconds();
-		if (CurrentTime - NoAmmoNotifyTime >= 0 && CurrentTime - NoAmmoNotifyTime <= NoAmmoFadeOutTime)
-		{
-			FString Text = FString();
+		//// No ammo message if required
+		//const float CurrentTime = GetWorld()->GetTimeSeconds();
+		//if (CurrentTime - NoAmmoNotifyTime >= 0 && CurrentTime - NoAmmoNotifyTime <= NoAmmoFadeOutTime)
+		//{
+		//	FString Text = FString();
 
-			const float Alpha = FMath::Min(1.0f, 1 - (CurrentTime - NoAmmoNotifyTime) / NoAmmoFadeOutTime);
-			Text = LOCTEXT("NoAmmo", "NO AMMO").ToString();
-			
-			FCanvasTextItem TextItem( FVector2D::ZeroVector, FText::GetEmpty(), BigFont, HUDDark );
-			TextItem.EnableShadow( FLinearColor::Black );
-			TextItem.Text = FText::FromString( Text );
-			TextItem.Scale = FVector2D( TextScale * ScaleUI, TextScale * ScaleUI );
-			TextItem.FontRenderInfo = ShadowedFont;
-			TextItem.SetColor(FLinearColor(0.75f, 0.125f, 0.125f, Alpha ));
-			AddMatchInfoString(TextItem);			
-		}
+		//	const float Alpha = FMath::Min(1.0f, 1 - (CurrentTime - NoAmmoNotifyTime) / NoAmmoFadeOutTime);
+		//	Text = LOCTEXT("NoAmmo", "NO AMMO").ToString();
+		//	
+		//	FCanvasTextItem TextItem( FVector2D::ZeroVector, FText::GetEmpty(), BigFont, HUDDark );
+		//	TextItem.EnableShadow( FLinearColor::Black );
+		//	TextItem.Text = FText::FromString( Text );
+		//	TextItem.Scale = FVector2D( TextScale * ScaleUI, TextScale * ScaleUI );
+		//	TextItem.FontRenderInfo = ShadowedFont;
+		//	TextItem.SetColor(FLinearColor(0.75f, 0.125f, 0.125f, Alpha ));
+		//	AddMatchInfoString(TextItem);			
+		//}
 	}
 
 	// Render the info messages such as wating to respawn - these will be drawn below any 'killed player' message.
