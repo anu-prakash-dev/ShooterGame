@@ -1389,7 +1389,6 @@ void AShooterCharacter::BuildPauseReplicationCheckPoints(TArray<FVector>& Releva
 	RelevancyCheckPoints.Add(BoundingBox.Max);
 }
 
-
 void AShooterCharacter::SwitchCamera() 
 { 
 	UpdatePawnMeshes();
