@@ -401,10 +401,10 @@ bool AShooterPlayerController::ServerCheat_Validate(const FString& Msg)
 
 void AShooterPlayerController::ServerCheat_Implementation(const FString& Msg)
 {
-	if (CheatManager)
-	{
-		ClientMessage(ConsoleCommand(Msg));
-	}
+	//if (CheatManager)
+	//{
+	//	ClientMessage(ConsoleCommand(Msg));
+	//}
 }
 
 void AShooterPlayerController::SimulateInputKey(FKey Key, bool bPressed)
@@ -465,52 +465,52 @@ void AShooterPlayerController::OnDeathMessage(class AShooterPlayerState* KillerP
 		ShooterHUD->ShowDeathMessage(KillerPlayerState, KilledPlayerState, KillerDamageType);		
 	}
 
-	ULocalPlayer* LocalPlayer = Cast<ULocalPlayer>(Player);
-	if (LocalPlayer && LocalPlayer->GetCachedUniqueNetId().IsValid() && KilledPlayerState->GetUniqueId().IsValid())
-	{
-		// if this controller is the player who died, update the hero stat.
-		if (*LocalPlayer->GetCachedUniqueNetId() == *KilledPlayerState->GetUniqueId())
-		{
-			const UWorld* World = GetWorld();
-			const IOnlineEventsPtr Events = Online::GetEventsInterface(World);
-			const IOnlineIdentityPtr Identity = Online::GetIdentityInterface(World);
+	//ULocalPlayer* LocalPlayer = Cast<ULocalPlayer>(Player);
+	//if (LocalPlayer && LocalPlayer->GetCachedUniqueNetId().IsValid() && KilledPlayerState->GetUniqueId().IsValid())
+	//{
+	//	// if this controller is the player who died, update the hero stat.
+	//	if (*LocalPlayer->GetCachedUniqueNetId() == *KilledPlayerState->GetUniqueId())
+	//	{
+	//		const UWorld* World = GetWorld();
+	//		const IOnlineEventsPtr Events = Online::GetEventsInterface(World);
+	//		const IOnlineIdentityPtr Identity = Online::GetIdentityInterface(World);
 
-			if (Events.IsValid() && Identity.IsValid())
-			{							
-				const int32 UserIndex = LocalPlayer->GetControllerId();
-				TSharedPtr<const FUniqueNetId> UniqueID = Identity->GetUniquePlayerId(UserIndex);
-				if (UniqueID.IsValid())
-				{				
-					AShooterCharacter* ShooterChar = Cast<AShooterCharacter>(GetCharacter());
-					AShooterWeapon* Weapon = ShooterChar ? ShooterChar->GetWeapon() : NULL;
+	//		if (Events.IsValid() && Identity.IsValid())
+	//		{							
+	//			const int32 UserIndex = LocalPlayer->GetControllerId();
+	//			TSharedPtr<const FUniqueNetId> UniqueID = Identity->GetUniquePlayerId(UserIndex);
+	//			if (UniqueID.IsValid())
+	//			{				
+	//				AShooterCharacter* ShooterChar = Cast<AShooterCharacter>(GetCharacter());
+	//				AShooterWeapon* Weapon = ShooterChar ? ShooterChar->GetWeapon() : NULL;
 
-					FVector Location = ShooterChar ? ShooterChar->GetActorLocation() : FVector::ZeroVector;
-					int32 WeaponType = Weapon ? (int32)Weapon->GetAmmoType() : 0;
+	//				FVector Location = ShooterChar ? ShooterChar->GetActorLocation() : FVector::ZeroVector;
+	//				int32 WeaponType = Weapon ? (int32)Weapon->GetAmmoType() : 0;
 
-					FOnlineEventParms Params;
-					Params.Add( TEXT( "SectionId" ), FVariantData( (int32)0 ) ); // unused
-					Params.Add( TEXT( "GameplayModeId" ), FVariantData( (int32)1 ) ); // @todo determine game mode (ffa v tdm)
-					Params.Add( TEXT( "DifficultyLevelId" ), FVariantData( (int32)0 ) ); // unused
+	//				FOnlineEventParms Params;
+	//				Params.Add( TEXT( "SectionId" ), FVariantData( (int32)0 ) ); // unused
+	//				Params.Add( TEXT( "GameplayModeId" ), FVariantData( (int32)1 ) ); // @todo determine game mode (ffa v tdm)
+	//				Params.Add( TEXT( "DifficultyLevelId" ), FVariantData( (int32)0 ) ); // unused
 
-					Params.Add( TEXT( "PlayerRoleId" ), FVariantData( (int32)0 ) ); // unused
-					Params.Add( TEXT( "PlayerWeaponId" ), FVariantData( (int32)WeaponType ) );
-					Params.Add( TEXT( "EnemyRoleId" ), FVariantData( (int32)0 ) ); // unused
-					Params.Add( TEXT( "EnemyWeaponId" ), FVariantData( (int32)0 ) ); // untracked
-				
-					Params.Add( TEXT( "LocationX" ), FVariantData( Location.X ) );
-					Params.Add( TEXT( "LocationY" ), FVariantData( Location.Y ) );
-					Params.Add( TEXT( "LocationZ" ), FVariantData( Location.Z ) );
-										
-					Events->TriggerEvent(*UniqueID, TEXT("PlayerDeath"), Params);
-				}
-			}
-		}
-	}	
+	//				Params.Add( TEXT( "PlayerRoleId" ), FVariantData( (int32)0 ) ); // unused
+	//				Params.Add( TEXT( "PlayerWeaponId" ), FVariantData( (int32)WeaponType ) );
+	//				Params.Add( TEXT( "EnemyRoleId" ), FVariantData( (int32)0 ) ); // unused
+	//				Params.Add( TEXT( "EnemyWeaponId" ), FVariantData( (int32)0 ) ); // untracked
+	//			
+	//				Params.Add( TEXT( "LocationX" ), FVariantData( Location.X ) );
+	//				Params.Add( TEXT( "LocationY" ), FVariantData( Location.Y ) );
+	//				Params.Add( TEXT( "LocationZ" ), FVariantData( Location.Z ) );
+	//									
+	//				Events->TriggerEvent(*UniqueID, TEXT("PlayerDeath"), Params);
+	//			}
+	//		}
+	//	}
+	//}	
 }
 
 void AShooterPlayerController::UpdateAchievementProgress( const FString& Id, float Percent )
 {
-	ULocalPlayer* LocalPlayer = Cast<ULocalPlayer>(Player);
+	/*ULocalPlayer* LocalPlayer = Cast<ULocalPlayer>(Player);
 	if (LocalPlayer)
 	{
 		IOnlineSubsystem* OnlineSub = Online::GetSubsystem(GetWorld());
@@ -556,70 +556,70 @@ void AShooterPlayerController::UpdateAchievementProgress( const FString& Id, flo
 	else
 	{
 		UE_LOG(LogOnline, Warning, TEXT("No local player, cannot update achievements."));
-	}
+	}*/
 }
 
 void AShooterPlayerController::OnToggleInGameMenu()
 {
-	if( GEngine->GameViewport == nullptr )
-	{
-		return;
-	}
+	//if( GEngine->GameViewport == nullptr )
+	//{
+	//	return;
+	//}
 
-	// this is not ideal, but necessary to prevent both players from pausing at the same time on the same frame
-	UWorld* GameWorld = GEngine->GameViewport->GetWorld();
+	//// this is not ideal, but necessary to prevent both players from pausing at the same time on the same frame
+	//UWorld* GameWorld = GEngine->GameViewport->GetWorld();
 
-	for(auto It = GameWorld->GetControllerIterator(); It; ++It)
-	{
-		AShooterPlayerController* Controller = Cast<AShooterPlayerController>(*It);
-		if(Controller && Controller->IsPaused())
-		{
-			return;
-		}
-	}
+	//for(auto It = GameWorld->GetControllerIterator(); It; ++It)
+	//{
+	//	AShooterPlayerController* Controller = Cast<AShooterPlayerController>(*It);
+	//	if(Controller && Controller->IsPaused())
+	//	{
+	//		return;
+	//	}
+	//}
 
-	// if no one's paused, pause
-	if (ShooterIngameMenu.IsValid())
-	{
-		ShooterIngameMenu->ToggleGameMenu();
-	}
+	//// if no one's paused, pause
+	//if (ShooterIngameMenu.IsValid())
+	//{
+	//	ShooterIngameMenu->ToggleGameMenu();
+	//}
 }
 
 void AShooterPlayerController::OnConditionalCloseScoreboard()
 {
-	AShooterHUD* ShooterHUD = GetShooterHUD();
-	if(ShooterHUD && ( ShooterHUD->IsMatchOver() == false ))
-	{
-		ShooterHUD->ConditionalCloseScoreboard();
-	}
+	//AShooterHUD* ShooterHUD = GetShooterHUD();
+	//if(ShooterHUD && ( ShooterHUD->IsMatchOver() == false ))
+	//{
+	//	ShooterHUD->ConditionalCloseScoreboard();
+	//}
 }
 
 void AShooterPlayerController::OnToggleScoreboard()
 {
-	AShooterHUD* ShooterHUD = GetShooterHUD();
-	if(ShooterHUD && ( ShooterHUD->IsMatchOver() == false ))
-	{
-		ShooterHUD->ToggleScoreboard();
-	}
+	//AShooterHUD* ShooterHUD = GetShooterHUD();
+	//if(ShooterHUD && ( ShooterHUD->IsMatchOver() == false ))
+	//{
+	//	ShooterHUD->ToggleScoreboard();
+	//}
 }
 
 void AShooterPlayerController::OnShowScoreboard()
 {
-	AShooterHUD* ShooterHUD = GetShooterHUD();
+	/*AShooterHUD* ShooterHUD = GetShooterHUD();
 	if(ShooterHUD)
 	{
 		ShooterHUD->ShowScoreboard(true);
-	}
+	}*/
 }
 
 void AShooterPlayerController::OnHideScoreboard()
 {
-	AShooterHUD* ShooterHUD = GetShooterHUD();
-	// If have a valid match and the match is over - hide the scoreboard
-	if( (ShooterHUD != NULL ) && ( ShooterHUD->IsMatchOver() == false ) )
-	{
-		ShooterHUD->ShowScoreboard(false);
-	}
+	//AShooterHUD* ShooterHUD = GetShooterHUD();
+	//// If have a valid match and the match is over - hide the scoreboard
+	//if( (ShooterHUD != NULL ) && ( ShooterHUD->IsMatchOver() == false ) )
+	//{
+	//	ShooterHUD->ShowScoreboard(false);
+	//}
 }
 
 bool AShooterPlayerController::IsGameMenuVisible() const
@@ -635,35 +635,35 @@ bool AShooterPlayerController::IsGameMenuVisible() const
 
 void AShooterPlayerController::SetInfiniteAmmo(bool bEnable)
 {
-	bInfiniteAmmo = bEnable;
+	//bInfiniteAmmo = bEnable;
 }
 
 void AShooterPlayerController::SetInfiniteClip(bool bEnable)
 {
-	bInfiniteClip = bEnable;
+	//bInfiniteClip = bEnable;
 }
 
 void AShooterPlayerController::SetHealthRegen(bool bEnable)
 {
-	bHealthRegen = bEnable;
+	//bHealthRegen = bEnable;
 }
 
 void AShooterPlayerController::SetGodMode(bool bEnable)
 {
-	bGodMode = bEnable;
+	//bGodMode = bEnable;
 }
 
 void AShooterPlayerController::SetIsVibrationEnabled(bool bEnable)
 {
-	bIsVibrationEnabled = bEnable;
+	//bIsVibrationEnabled = bEnable;
 }
 
 void AShooterPlayerController::ClientGameStarted_Implementation()
 {
-	bAllowGameActions = true;
+	//bAllowGameActions = true;
 
-	// Enable controls mode now the game has started
-	SetIgnoreMoveInput(false);
+	//// Enable controls mode now the game has started
+	//SetIgnoreMoveInput(false);
 
 	AShooterHUD* ShooterHUD = GetShooterHUD();
 	if (ShooterHUD)
@@ -671,91 +671,91 @@ void AShooterPlayerController::ClientGameStarted_Implementation()
 		ShooterHUD->SetMatchState(EShooterMatchState::Playing);
 		ShooterHUD->ShowScoreboard(false);
 	}
-	bGameEndedFrame = false;
+	//bGameEndedFrame = false;
 
 
-	QueryAchievements();
+	//QueryAchievements();
 
-	QueryStats();
+	//QueryStats();
 
 
-	const UWorld* World = GetWorld();
+	//const UWorld* World = GetWorld();
 
-	// Send round start event
-	const IOnlineEventsPtr Events = Online::GetEventsInterface(World);
-	ULocalPlayer* LocalPlayer = Cast<ULocalPlayer>(Player);
+	//// Send round start event
+	//const IOnlineEventsPtr Events = Online::GetEventsInterface(World);
+	//ULocalPlayer* LocalPlayer = Cast<ULocalPlayer>(Player);
 
-	if(LocalPlayer != nullptr && World != nullptr && Events.IsValid())
-	{
-		FUniqueNetIdRepl UniqueId = LocalPlayer->GetPreferredUniqueNetId();
+	//if(LocalPlayer != nullptr && World != nullptr && Events.IsValid())
+	//{
+	//	FUniqueNetIdRepl UniqueId = LocalPlayer->GetPreferredUniqueNetId();
 
-		if (UniqueId.IsValid())
-		{
-			// Generate a new session id
-			Events->SetPlayerSessionId(*UniqueId, FGuid::NewGuid());
+	//	if (UniqueId.IsValid())
+	//	{
+	//		// Generate a new session id
+	//		Events->SetPlayerSessionId(*UniqueId, FGuid::NewGuid());
 
-			FString MapName = *FPackageName::GetShortName(World->PersistentLevel->GetOutermost()->GetName());
+	//		FString MapName = *FPackageName::GetShortName(World->PersistentLevel->GetOutermost()->GetName());
 
-			// Fire session start event for all cases
-			FOnlineEventParms Params;
-			Params.Add( TEXT( "GameplayModeId" ), FVariantData( (int32)1 ) ); // @todo determine game mode (ffa v tdm)
-			Params.Add( TEXT( "DifficultyLevelId" ), FVariantData( (int32)0 ) ); // unused
-			Params.Add( TEXT( "MapName" ), FVariantData( MapName ) );
-			
-			Events->TriggerEvent(*UniqueId, TEXT("PlayerSessionStart"), Params);
+	//		// Fire session start event for all cases
+	//		FOnlineEventParms Params;
+	//		Params.Add( TEXT( "GameplayModeId" ), FVariantData( (int32)1 ) ); // @todo determine game mode (ffa v tdm)
+	//		Params.Add( TEXT( "DifficultyLevelId" ), FVariantData( (int32)0 ) ); // unused
+	//		Params.Add( TEXT( "MapName" ), FVariantData( MapName ) );
+	//		
+	//		Events->TriggerEvent(*UniqueId, TEXT("PlayerSessionStart"), Params);
 
-			// Online matches require the MultiplayerRoundStart event as well
-			UShooterGameInstance* SGI = Cast<UShooterGameInstance>(World->GetGameInstance());
+	//		// Online matches require the MultiplayerRoundStart event as well
+	//		UShooterGameInstance* SGI = Cast<UShooterGameInstance>(World->GetGameInstance());
 
-			if (SGI && (SGI->GetOnlineMode() == EOnlineMode::Online))
-			{
-				FOnlineEventParms MultiplayerParams;
+	//		if (SGI && (SGI->GetOnlineMode() == EOnlineMode::Online))
+	//		{
+	//			FOnlineEventParms MultiplayerParams;
 
-				// @todo: fill in with real values
-				MultiplayerParams.Add( TEXT( "SectionId" ), FVariantData( (int32)0 ) ); // unused
-				MultiplayerParams.Add( TEXT( "GameplayModeId" ), FVariantData( (int32)1 ) ); // @todo determine game mode (ffa v tdm)
-				MultiplayerParams.Add( TEXT( "MatchTypeId" ), FVariantData( (int32)1 ) ); // @todo abstract the specific meaning of this value across platforms
-				MultiplayerParams.Add( TEXT( "DifficultyLevelId" ), FVariantData( (int32)0 ) ); // unused
-				
-				Events->TriggerEvent(*UniqueId, TEXT("MultiplayerRoundStart"), MultiplayerParams);
-			}
+	//			// @todo: fill in with real values
+	//			MultiplayerParams.Add( TEXT( "SectionId" ), FVariantData( (int32)0 ) ); // unused
+	//			MultiplayerParams.Add( TEXT( "GameplayModeId" ), FVariantData( (int32)1 ) ); // @todo determine game mode (ffa v tdm)
+	//			MultiplayerParams.Add( TEXT( "MatchTypeId" ), FVariantData( (int32)1 ) ); // @todo abstract the specific meaning of this value across platforms
+	//			MultiplayerParams.Add( TEXT( "DifficultyLevelId" ), FVariantData( (int32)0 ) ); // unused
+	//			
+	//			Events->TriggerEvent(*UniqueId, TEXT("MultiplayerRoundStart"), MultiplayerParams);
+	//		}
 
-			bHasSentStartEvents = true;
-		}
-	}
+	//		bHasSentStartEvents = true;
+	//	}
+	//}
 }
 
 /** Starts the online game using the session name in the PlayerState */
 void AShooterPlayerController::ClientStartOnlineGame_Implementation()
 {
-	if (!IsPrimaryPlayer())
-		return;
+	//if (!IsPrimaryPlayer())
+	//	return;
 
-	AShooterPlayerState* ShooterPlayerState = Cast<AShooterPlayerState>(PlayerState);
-	if (ShooterPlayerState)
-	{
-		IOnlineSubsystem* OnlineSub = Online::GetSubsystem(GetWorld());
-		if (OnlineSub)
-		{
-			IOnlineSessionPtr Sessions = OnlineSub->GetSessionInterface();
-			if (Sessions.IsValid() && (Sessions->GetNamedSession(ShooterPlayerState->SessionName) != nullptr))
-			{
-				UE_LOG(LogOnline, Log, TEXT("Starting session %s on client"), *ShooterPlayerState->SessionName.ToString() );
-				Sessions->StartSession(ShooterPlayerState->SessionName);
-			}
-		}
-	}
-	else
-	{
-		// Keep retrying until player state is replicated
-		GetWorld()->GetTimerManager().SetTimer(TimerHandle_ClientStartOnlineGame, this, &AShooterPlayerController::ClientStartOnlineGame_Implementation, 0.2f, false);
-	}
+	//AShooterPlayerState* ShooterPlayerState = Cast<AShooterPlayerState>(PlayerState);
+	//if (ShooterPlayerState)
+	//{
+	//	IOnlineSubsystem* OnlineSub = Online::GetSubsystem(GetWorld());
+	//	if (OnlineSub)
+	//	{
+	//		IOnlineSessionPtr Sessions = OnlineSub->GetSessionInterface();
+	//		if (Sessions.IsValid() && (Sessions->GetNamedSession(ShooterPlayerState->SessionName) != nullptr))
+	//		{
+	//			UE_LOG(LogOnline, Log, TEXT("Starting session %s on client"), *ShooterPlayerState->SessionName.ToString() );
+	//			Sessions->StartSession(ShooterPlayerState->SessionName);
+	//		}
+	//	}
+	//}
+	//else
+	//{
+	//	// Keep retrying until player state is replicated
+	//	GetWorld()->GetTimerManager().SetTimer(TimerHandle_ClientStartOnlineGame, this, &AShooterPlayerController::ClientStartOnlineGame_Implementation, 0.2f, false);
+	//}
 }
 
 /** Ends the online game using the session name in the PlayerState */
 void AShooterPlayerController::ClientEndOnlineGame_Implementation()
 {
-	if (!IsPrimaryPlayer())
+	/*if (!IsPrimaryPlayer())
 		return;
 
 	AShooterPlayerState* ShooterPlayerState = Cast<AShooterPlayerState>(PlayerState);
@@ -771,157 +771,157 @@ void AShooterPlayerController::ClientEndOnlineGame_Implementation()
 				Sessions->EndSession(ShooterPlayerState->SessionName);
 			}
 		}
-	}
+	}*/
 }
 
 void AShooterPlayerController::HandleReturnToMainMenu()
 {
-	OnHideScoreboard();
-	CleanupSessionOnReturnToMenu();
+	/*OnHideScoreboard();
+	CleanupSessionOnReturnToMenu();*/
 }
 
 void AShooterPlayerController::ClientReturnToMainMenu_Implementation(const FString& InReturnReason)
 {		
-	const UWorld* World = GetWorld();
-	UShooterGameInstance* SGI = World != NULL ? Cast<UShooterGameInstance>(World->GetGameInstance()) : NULL;
+	//const UWorld* World = GetWorld();
+	//UShooterGameInstance* SGI = World != NULL ? Cast<UShooterGameInstance>(World->GetGameInstance()) : NULL;
 
-	if ( !ensure( SGI != NULL ) )
-	{
-		return;
-	}
+	//if ( !ensure( SGI != NULL ) )
+	//{
+	//	return;
+	//}
 
-	if ( GetNetMode() == NM_Client )
-	{
-		const FText ReturnReason	= NSLOCTEXT( "NetworkErrors", "HostQuit", "The host has quit the match." );
-		const FText OKButton		= NSLOCTEXT( "DialogButtons", "OKAY", "OK" );
+	//if ( GetNetMode() == NM_Client )
+	//{
+	//	const FText ReturnReason	= NSLOCTEXT( "NetworkErrors", "HostQuit", "The host has quit the match." );
+	//	const FText OKButton		= NSLOCTEXT( "DialogButtons", "OKAY", "OK" );
 
-		SGI->ShowMessageThenGotoState( ReturnReason, OKButton, FText::GetEmpty(), ShooterGameInstanceState::MainMenu );
-	}
-	else
-	{
-		SGI->GotoState(ShooterGameInstanceState::MainMenu);
-	}
+	//	SGI->ShowMessageThenGotoState( ReturnReason, OKButton, FText::GetEmpty(), ShooterGameInstanceState::MainMenu );
+	//}
+	//else
+	//{
+	//	SGI->GotoState(ShooterGameInstanceState::MainMenu);
+	//}
 
-	// Clear the flag so we don't do normal end of round stuff next
-	bGameEndedFrame = false;
+	//// Clear the flag so we don't do normal end of round stuff next
+	//bGameEndedFrame = false;
 }
 
 /** Ends and/or destroys game session */
 void AShooterPlayerController::CleanupSessionOnReturnToMenu()
 {
-	const UWorld* World = GetWorld();
+	/*const UWorld* World = GetWorld();
 	UShooterGameInstance * SGI = World != NULL ? Cast<UShooterGameInstance>( World->GetGameInstance() ) : NULL;
 
 	if ( ensure( SGI != NULL ) )
 	{
 		SGI->CleanupSessionOnReturnToMenu();
-	}
+	}*/
 }
 
 void AShooterPlayerController::ClientGameEnded_Implementation(class AActor* EndGameFocus, bool bIsWinner)
 {
 	Super::ClientGameEnded_Implementation(EndGameFocus, bIsWinner);
 	
-	// Disable controls now the game has ended
-	SetIgnoreMoveInput(true);
+	//// Disable controls now the game has ended
+	//SetIgnoreMoveInput(true);
 
-	bAllowGameActions = false;
+	//bAllowGameActions = false;
 
-	// Make sure that we still have valid view target
-	SetViewTarget(GetPawn());
+	//// Make sure that we still have valid view target
+	//SetViewTarget(GetPawn());
 
-	AShooterHUD* ShooterHUD = GetShooterHUD();
-	if (ShooterHUD)
-	{
-		ShooterHUD->SetMatchState(bIsWinner ? EShooterMatchState::Won : EShooterMatchState::Lost);
-	}
+	//AShooterHUD* ShooterHUD = GetShooterHUD();
+	//if (ShooterHUD)
+	//{
+	//	ShooterHUD->SetMatchState(bIsWinner ? EShooterMatchState::Won : EShooterMatchState::Lost);
+	//}
 
-	UpdateSaveFileOnGameEnd(bIsWinner);
-	UpdateAchievementsOnGameEnd();
-	UpdateLeaderboardsOnGameEnd();
-	UpdateStatsOnGameEnd(bIsWinner);
+	//UpdateSaveFileOnGameEnd(bIsWinner);
+	//UpdateAchievementsOnGameEnd();
+	//UpdateLeaderboardsOnGameEnd();
+	//UpdateStatsOnGameEnd(bIsWinner);
 
-	// Flag that the game has just ended (if it's ended due to host loss we want to wait for ClientReturnToMainMenu_Implementation first, incase we don't want to process)
-	bGameEndedFrame = true;
+	//// Flag that the game has just ended (if it's ended due to host loss we want to wait for ClientReturnToMainMenu_Implementation first, incase we don't want to process)
+	//bGameEndedFrame = true;
 }
 
 void AShooterPlayerController::ClientSendRoundEndEvent_Implementation(bool bIsWinner, int32 ExpendedTimeInSeconds)
 {
-	const UWorld* World = GetWorld();
-	const IOnlineEventsPtr Events = Online::GetEventsInterface(World);
-	ULocalPlayer* LocalPlayer = Cast<ULocalPlayer>(Player);
+	//const UWorld* World = GetWorld();
+	//const IOnlineEventsPtr Events = Online::GetEventsInterface(World);
+	//ULocalPlayer* LocalPlayer = Cast<ULocalPlayer>(Player);
 
-	if(bHasSentStartEvents && LocalPlayer != nullptr && World != nullptr && Events.IsValid())
-	{	
-		FUniqueNetIdRepl UniqueId = LocalPlayer->GetPreferredUniqueNetId();
+	//if(bHasSentStartEvents && LocalPlayer != nullptr && World != nullptr && Events.IsValid())
+	//{	
+	//	FUniqueNetIdRepl UniqueId = LocalPlayer->GetPreferredUniqueNetId();
 
-		if (UniqueId.IsValid())
-		{
-			FString MapName = *FPackageName::GetShortName(World->PersistentLevel->GetOutermost()->GetName());
-			AShooterPlayerState* ShooterPlayerState = Cast<AShooterPlayerState>(PlayerState);
-			int32 PlayerScore = ShooterPlayerState ? ShooterPlayerState->GetScore() : 0;
-			int32 PlayerDeaths = ShooterPlayerState ? ShooterPlayerState->GetDeaths() : 0;
-			int32 PlayerKills = ShooterPlayerState ? ShooterPlayerState->GetKills() : 0;
-			
-			// Fire session end event for all cases
-			FOnlineEventParms Params;
-			Params.Add( TEXT( "GameplayModeId" ), FVariantData( (int32)1 ) ); // @todo determine game mode (ffa v tdm)
-			Params.Add( TEXT( "DifficultyLevelId" ), FVariantData( (int32)0 ) ); // unused
-			Params.Add( TEXT( "ExitStatusId" ), FVariantData( (int32)0 ) ); // unused
-			Params.Add( TEXT( "PlayerScore" ), FVariantData( (int32)PlayerScore ) );
-			Params.Add( TEXT( "PlayerWon" ), FVariantData( (bool)bIsWinner ) );
-			Params.Add( TEXT( "MapName" ), FVariantData( MapName ) );
-			Params.Add( TEXT( "MapNameString" ), FVariantData( MapName ) ); // @todo workaround for a bug in backend service, remove when fixed
-			
-			Events->TriggerEvent(*UniqueId, TEXT("PlayerSessionEnd"), Params);
+	//	if (UniqueId.IsValid())
+	//	{
+	//		FString MapName = *FPackageName::GetShortName(World->PersistentLevel->GetOutermost()->GetName());
+	//		AShooterPlayerState* ShooterPlayerState = Cast<AShooterPlayerState>(PlayerState);
+	//		int32 PlayerScore = ShooterPlayerState ? ShooterPlayerState->GetScore() : 0;
+	//		int32 PlayerDeaths = ShooterPlayerState ? ShooterPlayerState->GetDeaths() : 0;
+	//		int32 PlayerKills = ShooterPlayerState ? ShooterPlayerState->GetKills() : 0;
+	//		
+	//		// Fire session end event for all cases
+	//		FOnlineEventParms Params;
+	//		Params.Add( TEXT( "GameplayModeId" ), FVariantData( (int32)1 ) ); // @todo determine game mode (ffa v tdm)
+	//		Params.Add( TEXT( "DifficultyLevelId" ), FVariantData( (int32)0 ) ); // unused
+	//		Params.Add( TEXT( "ExitStatusId" ), FVariantData( (int32)0 ) ); // unused
+	//		Params.Add( TEXT( "PlayerScore" ), FVariantData( (int32)PlayerScore ) );
+	//		Params.Add( TEXT( "PlayerWon" ), FVariantData( (bool)bIsWinner ) );
+	//		Params.Add( TEXT( "MapName" ), FVariantData( MapName ) );
+	//		Params.Add( TEXT( "MapNameString" ), FVariantData( MapName ) ); // @todo workaround for a bug in backend service, remove when fixed
+	//		
+	//		Events->TriggerEvent(*UniqueId, TEXT("PlayerSessionEnd"), Params);
 
-			// Update all time results
-			FOnlineEventParms AllTimeMatchParams;
-			AllTimeMatchParams.Add(TEXT("ShooterAllTimeMatchResultsScore"), FVariantData((uint64)PlayerScore));
-			AllTimeMatchParams.Add(TEXT("ShooterAllTimeMatchResultsDeaths"), FVariantData((int32)PlayerDeaths));
-			AllTimeMatchParams.Add(TEXT("ShooterAllTimeMatchResultsFrags"), FVariantData((int32)PlayerKills));
-			AllTimeMatchParams.Add(TEXT("ShooterAllTimeMatchResultsMatchesPlayed"), FVariantData((int32)1));
+	//		// Update all time results
+	//		FOnlineEventParms AllTimeMatchParams;
+	//		AllTimeMatchParams.Add(TEXT("ShooterAllTimeMatchResultsScore"), FVariantData((uint64)PlayerScore));
+	//		AllTimeMatchParams.Add(TEXT("ShooterAllTimeMatchResultsDeaths"), FVariantData((int32)PlayerDeaths));
+	//		AllTimeMatchParams.Add(TEXT("ShooterAllTimeMatchResultsFrags"), FVariantData((int32)PlayerKills));
+	//		AllTimeMatchParams.Add(TEXT("ShooterAllTimeMatchResultsMatchesPlayed"), FVariantData((int32)1));
 
-			Events->TriggerEvent(*UniqueId, TEXT("ShooterAllTimeMatchResults"), AllTimeMatchParams);
+	//		Events->TriggerEvent(*UniqueId, TEXT("ShooterAllTimeMatchResults"), AllTimeMatchParams);
 
-			// Online matches require the MultiplayerRoundEnd event as well
-			UShooterGameInstance* SGI = Cast<UShooterGameInstance>(World->GetGameInstance());
-			if (SGI && (SGI->GetOnlineMode() == EOnlineMode::Online))
-			{
-				FOnlineEventParms MultiplayerParams;
-				MultiplayerParams.Add( TEXT( "SectionId" ), FVariantData( (int32)0 ) ); // unused
-				MultiplayerParams.Add( TEXT( "GameplayModeId" ), FVariantData( (int32)1 ) ); // @todo determine game mode (ffa v tdm)
-				MultiplayerParams.Add( TEXT( "MatchTypeId" ), FVariantData( (int32)1 ) ); // @todo abstract the specific meaning of this value across platforms
-				MultiplayerParams.Add( TEXT( "DifficultyLevelId" ), FVariantData( (int32)0 ) ); // unused
-				MultiplayerParams.Add( TEXT( "TimeInSeconds" ), FVariantData( (float)ExpendedTimeInSeconds ) );
-				MultiplayerParams.Add( TEXT( "ExitStatusId" ), FVariantData( (int32)0 ) ); // unused
-					
-				Events->TriggerEvent(*UniqueId, TEXT("MultiplayerRoundEnd"), MultiplayerParams);
-			}
-		}
+	//		// Online matches require the MultiplayerRoundEnd event as well
+	//		UShooterGameInstance* SGI = Cast<UShooterGameInstance>(World->GetGameInstance());
+	//		if (SGI && (SGI->GetOnlineMode() == EOnlineMode::Online))
+	//		{
+	//			FOnlineEventParms MultiplayerParams;
+	//			MultiplayerParams.Add( TEXT( "SectionId" ), FVariantData( (int32)0 ) ); // unused
+	//			MultiplayerParams.Add( TEXT( "GameplayModeId" ), FVariantData( (int32)1 ) ); // @todo determine game mode (ffa v tdm)
+	//			MultiplayerParams.Add( TEXT( "MatchTypeId" ), FVariantData( (int32)1 ) ); // @todo abstract the specific meaning of this value across platforms
+	//			MultiplayerParams.Add( TEXT( "DifficultyLevelId" ), FVariantData( (int32)0 ) ); // unused
+	//			MultiplayerParams.Add( TEXT( "TimeInSeconds" ), FVariantData( (float)ExpendedTimeInSeconds ) );
+	//			MultiplayerParams.Add( TEXT( "ExitStatusId" ), FVariantData( (int32)0 ) ); // unused
+	//				
+	//			Events->TriggerEvent(*UniqueId, TEXT("MultiplayerRoundEnd"), MultiplayerParams);
+	//		}
+	//	}
 
-		bHasSentStartEvents = false;
-	}
+	//	bHasSentStartEvents = false;
+	//}
 }
 
 void AShooterPlayerController::SetCinematicMode(bool bInCinematicMode, bool bHidePlayer, bool bAffectsHUD, bool bAffectsMovement, bool bAffectsTurning)
 {
 	Super::SetCinematicMode(bInCinematicMode, bHidePlayer, bAffectsHUD, bAffectsMovement, bAffectsTurning);
 
-	// If we have a pawn we need to determine if we should show/hide the weapon
-	AShooterCharacter* MyPawn = Cast<AShooterCharacter>(GetPawn());
-	AShooterWeapon* MyWeapon = MyPawn ? MyPawn->GetWeapon() : NULL;
-	if (MyWeapon)
-	{
-		if (bInCinematicMode && bHidePlayer)
-		{
-			MyWeapon->SetActorHiddenInGame(true);
-		}
-		else if (!bCinematicMode)
-		{
-			MyWeapon->SetActorHiddenInGame(false);
-		}
-	}
+	//// If we have a pawn we need to determine if we should show/hide the weapon
+	//AShooterCharacter* MyPawn = Cast<AShooterCharacter>(GetPawn());
+	//AShooterWeapon* MyWeapon = MyPawn ? MyPawn->GetWeapon() : NULL;
+	//if (MyWeapon)
+	//{
+	//	if (bInCinematicMode && bHidePlayer)
+	//	{
+	//		MyWeapon->SetActorHiddenInGame(true);
+	//	}
+	//	else if (!bCinematicMode)
+	//	{
+	//		MyWeapon->SetActorHiddenInGame(false);
+	//	}
+	//}
 }
 
 bool AShooterPlayerController::IsMoveInputIgnored() const
@@ -952,29 +952,29 @@ void AShooterPlayerController::InitInputSystem()
 {
 	Super::InitInputSystem();
 
-	UShooterPersistentUser* PersistentUser = GetPersistentUser();
+	/*UShooterPersistentUser* PersistentUser = GetPersistentUser();
 	if(PersistentUser)
 	{
 		PersistentUser->TellInputAboutKeybindings();
-	}
+	}*/
 }
 
 void AShooterPlayerController::GetLifetimeReplicatedProps( TArray< FLifetimeProperty > & OutLifetimeProps ) const
 {
 	Super::GetLifetimeReplicatedProps( OutLifetimeProps );
 
-	DOREPLIFETIME_CONDITION( AShooterPlayerController, bInfiniteAmmo, COND_OwnerOnly );
-	DOREPLIFETIME_CONDITION( AShooterPlayerController, bInfiniteClip, COND_OwnerOnly );
+	//DOREPLIFETIME_CONDITION( AShooterPlayerController, bInfiniteAmmo, COND_OwnerOnly );
+	//DOREPLIFETIME_CONDITION( AShooterPlayerController, bInfiniteClip, COND_OwnerOnly );
 
-	DOREPLIFETIME(AShooterPlayerController, bHealthRegen);
+	//DOREPLIFETIME(AShooterPlayerController, bHealthRegen);
 }
 
 void AShooterPlayerController::Suicide()
 {
-	if ( IsInState(NAME_Playing) )
-	{
-		ServerSuicide();
-	}
+	//if ( IsInState(NAME_Playing) )
+	//{
+	//	ServerSuicide();
+	//}
 }
 
 bool AShooterPlayerController::ServerSuicide_Validate()
@@ -984,14 +984,14 @@ bool AShooterPlayerController::ServerSuicide_Validate()
 
 void AShooterPlayerController::ServerSuicide_Implementation()
 {
-	if ( (GetPawn() != NULL) && ((GetWorld()->TimeSeconds - GetPawn()->CreationTime > 1) || (GetNetMode() == NM_Standalone)) )
-	{
-		AShooterCharacter* MyPawn = Cast<AShooterCharacter>(GetPawn());
-		if (MyPawn)
-		{
-			MyPawn->Suicide();
-		}
-	}
+	//if ( (GetPawn() != NULL) && ((GetWorld()->TimeSeconds - GetPawn()->CreationTime > 1) || (GetNetMode() == NM_Standalone)) )
+	//{
+	//	AShooterCharacter* MyPawn = Cast<AShooterCharacter>(GetPawn());
+	//	if (MyPawn)
+	//	{
+	//		MyPawn->Suicide();
+	//	}
+	//}
 }
 
 bool AShooterPlayerController::HasInfiniteAmmo() const
@@ -1026,16 +1026,16 @@ bool AShooterPlayerController::IsGameInputAllowed() const
 
 void AShooterPlayerController::ToggleChatWindow()
 {
-	AShooterHUD* ShooterHUD = Cast<AShooterHUD>(GetHUD());
+	/*AShooterHUD* ShooterHUD = Cast<AShooterHUD>(GetHUD());
 	if (ShooterHUD)
 	{
 		ShooterHUD->ToggleChat();
-	}
+	}*/
 }
 
 void AShooterPlayerController::ClientTeamMessage_Implementation( APlayerState* SenderPlayerState, const FString& S, FName Type, float MsgLifeTime  )
 {
-	AShooterHUD* ShooterHUD = Cast<AShooterHUD>(GetHUD());
+	/*AShooterHUD* ShooterHUD = Cast<AShooterHUD>(GetHUD());
 	if (ShooterHUD)
 	{
 		if( Type == ServerSayString )
@@ -1045,12 +1045,12 @@ void AShooterPlayerController::ClientTeamMessage_Implementation( APlayerState* S
 				ShooterHUD->AddChatLine(FText::FromString(S), false);
 			}
 		}
-	}
+	}*/
 }
 
 void AShooterPlayerController::Say( const FString& Msg )
 {
-	ServerSay(Msg.Left(128));
+	//ServerSay(Msg.Left(128));
 }
 
 bool AShooterPlayerController::ServerSay_Validate( const FString& Msg )
@@ -1060,7 +1060,7 @@ bool AShooterPlayerController::ServerSay_Validate( const FString& Msg )
 
 void AShooterPlayerController::ServerSay_Implementation( const FString& Msg )
 {
-	GetWorld()->GetAuthGameMode<AShooterGameMode>()->Broadcast(this, Msg, ServerSayString);
+	//GetWorld()->GetAuthGameMode<AShooterGameMode>()->Broadcast(this, Msg, ServerSayString);
 }
 
 AShooterHUD* AShooterPlayerController::GetShooterHUD() const
@@ -1121,241 +1121,241 @@ FVector AShooterPlayerController::GetFocalLocation() const
 
 void AShooterPlayerController::ShowInGameMenu()
 {
-	AShooterHUD* ShooterHUD = GetShooterHUD();	
+	/*AShooterHUD* ShooterHUD = GetShooterHUD();	
 	if(ShooterIngameMenu.IsValid() && !ShooterIngameMenu->GetIsGameMenuUp() && ShooterHUD && (ShooterHUD->IsMatchOver() == false))
 	{
 		ShooterIngameMenu->ToggleGameMenu();
-	}
+	}*/
 }
 void AShooterPlayerController::UpdateAchievementsOnGameEnd()
 {
-	ULocalPlayer* LocalPlayer = Cast<ULocalPlayer>(Player);
-	if (LocalPlayer)
-	{
-		AShooterPlayerState* ShooterPlayerState = Cast<AShooterPlayerState>(PlayerState);
-		if (ShooterPlayerState)
-		{			
-			const UShooterPersistentUser*  PersistentUser = GetPersistentUser();
+	//ULocalPlayer* LocalPlayer = Cast<ULocalPlayer>(Player);
+	//if (LocalPlayer)
+	//{
+	//	AShooterPlayerState* ShooterPlayerState = Cast<AShooterPlayerState>(PlayerState);
+	//	if (ShooterPlayerState)
+	//	{			
+	//		const UShooterPersistentUser*  PersistentUser = GetPersistentUser();
 
-			if (PersistentUser)
-			{						
-				const int32 Wins = PersistentUser->GetWins();
-				const int32 Losses = PersistentUser->GetLosses();
-				const int32 Matches = Wins + Losses;
+	//		if (PersistentUser)
+	//		{						
+	//			const int32 Wins = PersistentUser->GetWins();
+	//			const int32 Losses = PersistentUser->GetLosses();
+	//			const int32 Matches = Wins + Losses;
 
-				const int32 TotalKills = PersistentUser->GetKills();
-				const int32 MatchScore = (int32)ShooterPlayerState->GetScore();
+	//			const int32 TotalKills = PersistentUser->GetKills();
+	//			const int32 MatchScore = (int32)ShooterPlayerState->GetScore();
 
-				const int32 TotalBulletsFired = PersistentUser->GetBulletsFired();
-				const int32 TotalRocketsFired = PersistentUser->GetRocketsFired();
-			
-				float TotalGameAchievement = 0;
-				float CurrentGameAchievement = 0;
-			
-				///////////////////////////////////////
-				// Kill achievements
-				if (TotalKills >= 1)
-				{
-					CurrentGameAchievement += 100.0f;
-				}
-				TotalGameAchievement += 100;
+	//			const int32 TotalBulletsFired = PersistentUser->GetBulletsFired();
+	//			const int32 TotalRocketsFired = PersistentUser->GetRocketsFired();
+	//		
+	//			float TotalGameAchievement = 0;
+	//			float CurrentGameAchievement = 0;
+	//		
+	//			///////////////////////////////////////
+	//			// Kill achievements
+	//			if (TotalKills >= 1)
+	//			{
+	//				CurrentGameAchievement += 100.0f;
+	//			}
+	//			TotalGameAchievement += 100;
 
-				{
-					float fSomeKillPct = ((float)TotalKills / (float)SomeKillsCount) * 100.0f;
-					fSomeKillPct = FMath::RoundToFloat(fSomeKillPct);
-					UpdateAchievementProgress(ACH_SOME_KILLS, fSomeKillPct);
+	//			{
+	//				float fSomeKillPct = ((float)TotalKills / (float)SomeKillsCount) * 100.0f;
+	//				fSomeKillPct = FMath::RoundToFloat(fSomeKillPct);
+	//				UpdateAchievementProgress(ACH_SOME_KILLS, fSomeKillPct);
 
-					CurrentGameAchievement += FMath::Min(fSomeKillPct, 100.0f);
-					TotalGameAchievement += 100;
-				}
+	//				CurrentGameAchievement += FMath::Min(fSomeKillPct, 100.0f);
+	//				TotalGameAchievement += 100;
+	//			}
 
-				{
-					float fLotsKillPct = ((float)TotalKills / (float)LotsKillsCount) * 100.0f;
-					fLotsKillPct = FMath::RoundToFloat(fLotsKillPct);
-					UpdateAchievementProgress(ACH_LOTS_KILLS, fLotsKillPct);
+	//			{
+	//				float fLotsKillPct = ((float)TotalKills / (float)LotsKillsCount) * 100.0f;
+	//				fLotsKillPct = FMath::RoundToFloat(fLotsKillPct);
+	//				UpdateAchievementProgress(ACH_LOTS_KILLS, fLotsKillPct);
 
-					CurrentGameAchievement += FMath::Min(fLotsKillPct, 100.0f);
-					TotalGameAchievement += 100;
-				}
-				///////////////////////////////////////
+	//				CurrentGameAchievement += FMath::Min(fLotsKillPct, 100.0f);
+	//				TotalGameAchievement += 100;
+	//			}
+	//			///////////////////////////////////////
 
-				///////////////////////////////////////
-				// Match Achievements
-				{
-					UpdateAchievementProgress(ACH_FINISH_MATCH, 100.0f);
+	//			///////////////////////////////////////
+	//			// Match Achievements
+	//			{
+	//				UpdateAchievementProgress(ACH_FINISH_MATCH, 100.0f);
 
-					CurrentGameAchievement += 100;
-					TotalGameAchievement += 100;
-				}
-			
-				{
-					float fLotsRoundsPct = ((float)Matches / (float)LotsMatchesCount) * 100.0f;
-					fLotsRoundsPct = FMath::RoundToFloat(fLotsRoundsPct);
-					UpdateAchievementProgress(ACH_LOTS_MATCHES, fLotsRoundsPct);
+	//				CurrentGameAchievement += 100;
+	//				TotalGameAchievement += 100;
+	//			}
+	//		
+	//			{
+	//				float fLotsRoundsPct = ((float)Matches / (float)LotsMatchesCount) * 100.0f;
+	//				fLotsRoundsPct = FMath::RoundToFloat(fLotsRoundsPct);
+	//				UpdateAchievementProgress(ACH_LOTS_MATCHES, fLotsRoundsPct);
 
-					CurrentGameAchievement += FMath::Min(fLotsRoundsPct, 100.0f);
-					TotalGameAchievement += 100;
-				}
-				///////////////////////////////////////
+	//				CurrentGameAchievement += FMath::Min(fLotsRoundsPct, 100.0f);
+	//				TotalGameAchievement += 100;
+	//			}
+	//			///////////////////////////////////////
 
-				///////////////////////////////////////
-				// Win Achievements
-				if (Wins >= 1)
-				{
-					UpdateAchievementProgress(ACH_FIRST_WIN, 100.0f);
+	//			///////////////////////////////////////
+	//			// Win Achievements
+	//			if (Wins >= 1)
+	//			{
+	//				UpdateAchievementProgress(ACH_FIRST_WIN, 100.0f);
 
-					CurrentGameAchievement += 100.0f;
-				}
-				TotalGameAchievement += 100;
+	//				CurrentGameAchievement += 100.0f;
+	//			}
+	//			TotalGameAchievement += 100;
 
-				{			
-					float fLotsWinPct = ((float)Wins / (float)LotsWinsCount) * 100.0f;
-					fLotsWinPct = FMath::RoundToInt(fLotsWinPct);
-					UpdateAchievementProgress(ACH_LOTS_WIN, fLotsWinPct);
+	//			{			
+	//				float fLotsWinPct = ((float)Wins / (float)LotsWinsCount) * 100.0f;
+	//				fLotsWinPct = FMath::RoundToInt(fLotsWinPct);
+	//				UpdateAchievementProgress(ACH_LOTS_WIN, fLotsWinPct);
 
-					CurrentGameAchievement += FMath::Min(fLotsWinPct, 100.0f);
-					TotalGameAchievement += 100;
-				}
+	//				CurrentGameAchievement += FMath::Min(fLotsWinPct, 100.0f);
+	//				TotalGameAchievement += 100;
+	//			}
 
-				{			
-					float fManyWinPct = ((float)Wins / (float)ManyWinsCount) * 100.0f;
-					fManyWinPct = FMath::RoundToInt(fManyWinPct);
-					UpdateAchievementProgress(ACH_MANY_WIN, fManyWinPct);
+	//			{			
+	//				float fManyWinPct = ((float)Wins / (float)ManyWinsCount) * 100.0f;
+	//				fManyWinPct = FMath::RoundToInt(fManyWinPct);
+	//				UpdateAchievementProgress(ACH_MANY_WIN, fManyWinPct);
 
-					CurrentGameAchievement += FMath::Min(fManyWinPct, 100.0f);
-					TotalGameAchievement += 100;
-				}
-				///////////////////////////////////////
+	//				CurrentGameAchievement += FMath::Min(fManyWinPct, 100.0f);
+	//				TotalGameAchievement += 100;
+	//			}
+	//			///////////////////////////////////////
 
-				///////////////////////////////////////
-				// Ammo Achievements
-				{
-					float fLotsBulletsPct = ((float)TotalBulletsFired / (float)LotsBulletsCount) * 100.0f;
-					fLotsBulletsPct = FMath::RoundToFloat(fLotsBulletsPct);
-					UpdateAchievementProgress(ACH_SHOOT_BULLETS, fLotsBulletsPct);
+	//			///////////////////////////////////////
+	//			// Ammo Achievements
+	//			{
+	//				float fLotsBulletsPct = ((float)TotalBulletsFired / (float)LotsBulletsCount) * 100.0f;
+	//				fLotsBulletsPct = FMath::RoundToFloat(fLotsBulletsPct);
+	//				UpdateAchievementProgress(ACH_SHOOT_BULLETS, fLotsBulletsPct);
 
-					CurrentGameAchievement += FMath::Min(fLotsBulletsPct, 100.0f);
-					TotalGameAchievement += 100;
-				}
+	//				CurrentGameAchievement += FMath::Min(fLotsBulletsPct, 100.0f);
+	//				TotalGameAchievement += 100;
+	//			}
 
-				{
-					float fLotsRocketsPct = ((float)TotalRocketsFired / (float)LotsRocketsCount) * 100.0f;
-					fLotsRocketsPct = FMath::RoundToFloat(fLotsRocketsPct);
-					UpdateAchievementProgress(ACH_SHOOT_ROCKETS, fLotsRocketsPct);
+	//			{
+	//				float fLotsRocketsPct = ((float)TotalRocketsFired / (float)LotsRocketsCount) * 100.0f;
+	//				fLotsRocketsPct = FMath::RoundToFloat(fLotsRocketsPct);
+	//				UpdateAchievementProgress(ACH_SHOOT_ROCKETS, fLotsRocketsPct);
 
-					CurrentGameAchievement += FMath::Min(fLotsRocketsPct, 100.0f);
-					TotalGameAchievement += 100;
-				}
-				///////////////////////////////////////
+	//				CurrentGameAchievement += FMath::Min(fLotsRocketsPct, 100.0f);
+	//				TotalGameAchievement += 100;
+	//			}
+	//			///////////////////////////////////////
 
-				///////////////////////////////////////
-				// Score Achievements
-				{
-					float fGoodScorePct = ((float)MatchScore / (float)GoodScoreCount) * 100.0f;
-					fGoodScorePct = FMath::RoundToFloat(fGoodScorePct);
-					UpdateAchievementProgress(ACH_GOOD_SCORE, fGoodScorePct);
-				}
+	//			///////////////////////////////////////
+	//			// Score Achievements
+	//			{
+	//				float fGoodScorePct = ((float)MatchScore / (float)GoodScoreCount) * 100.0f;
+	//				fGoodScorePct = FMath::RoundToFloat(fGoodScorePct);
+	//				UpdateAchievementProgress(ACH_GOOD_SCORE, fGoodScorePct);
+	//			}
 
-				{
-					float fGreatScorePct = ((float)MatchScore / (float)GreatScoreCount) * 100.0f;
-					fGreatScorePct = FMath::RoundToFloat(fGreatScorePct);
-					UpdateAchievementProgress(ACH_GREAT_SCORE, fGreatScorePct);
-				}
-				///////////////////////////////////////
+	//			{
+	//				float fGreatScorePct = ((float)MatchScore / (float)GreatScoreCount) * 100.0f;
+	//				fGreatScorePct = FMath::RoundToFloat(fGreatScorePct);
+	//				UpdateAchievementProgress(ACH_GREAT_SCORE, fGreatScorePct);
+	//			}
+	//			///////////////////////////////////////
 
-				///////////////////////////////////////
-				// Map Play Achievements
-				UWorld* World = GetWorld();
-				if (World)
-				{			
-					FString MapName = *FPackageName::GetShortName(World->PersistentLevel->GetOutermost()->GetName());
-					if (MapName.Find(TEXT("Highrise")) != -1)
-					{
-						UpdateAchievementProgress(ACH_PLAY_HIGHRISE, 100.0f);
-					}
-					else if (MapName.Find(TEXT("Sanctuary")) != -1)
-					{
-						UpdateAchievementProgress(ACH_PLAY_SANCTUARY, 100.0f);
-					}
-				}
-				///////////////////////////////////////			
+	//			///////////////////////////////////////
+	//			// Map Play Achievements
+	//			UWorld* World = GetWorld();
+	//			if (World)
+	//			{			
+	//				FString MapName = *FPackageName::GetShortName(World->PersistentLevel->GetOutermost()->GetName());
+	//				if (MapName.Find(TEXT("Highrise")) != -1)
+	//				{
+	//					UpdateAchievementProgress(ACH_PLAY_HIGHRISE, 100.0f);
+	//				}
+	//				else if (MapName.Find(TEXT("Sanctuary")) != -1)
+	//				{
+	//					UpdateAchievementProgress(ACH_PLAY_SANCTUARY, 100.0f);
+	//				}
+	//			}
+	//			///////////////////////////////////////			
 
-				const IOnlineEventsPtr Events = Online::GetEventsInterface(World);
-				const IOnlineIdentityPtr Identity = Online::GetIdentityInterface(World);
+	//			const IOnlineEventsPtr Events = Online::GetEventsInterface(World);
+	//			const IOnlineIdentityPtr Identity = Online::GetIdentityInterface(World);
 
-				if (Events.IsValid() && Identity.IsValid())
-				{							
-					const int32 UserIndex = LocalPlayer->GetControllerId();
-					TSharedPtr<const FUniqueNetId> UniqueID = Identity->GetUniquePlayerId(UserIndex);
-					if (UniqueID.IsValid())
-					{				
-						FOnlineEventParms Params;
+	//			if (Events.IsValid() && Identity.IsValid())
+	//			{							
+	//				const int32 UserIndex = LocalPlayer->GetControllerId();
+	//				TSharedPtr<const FUniqueNetId> UniqueID = Identity->GetUniquePlayerId(UserIndex);
+	//				if (UniqueID.IsValid())
+	//				{				
+	//					FOnlineEventParms Params;
 
-						float fGamePct = (CurrentGameAchievement / TotalGameAchievement) * 100.0f;
-						fGamePct = FMath::RoundToFloat(fGamePct);
-						Params.Add( TEXT( "CompletionPercent" ), FVariantData( (float)fGamePct ) );
-						if (UniqueID.IsValid())
-						{				
-							Events->TriggerEvent(*UniqueID, TEXT("GameProgress"), Params);
-						}
-					}
-				}
-			}
-		}
-	}
+	//					float fGamePct = (CurrentGameAchievement / TotalGameAchievement) * 100.0f;
+	//					fGamePct = FMath::RoundToFloat(fGamePct);
+	//					Params.Add( TEXT( "CompletionPercent" ), FVariantData( (float)fGamePct ) );
+	//					if (UniqueID.IsValid())
+	//					{				
+	//						Events->TriggerEvent(*UniqueID, TEXT("GameProgress"), Params);
+	//					}
+	//				}
+	//			}
+	//		}
+	//	}
+	//}
 }
 
 void AShooterPlayerController::UpdateLeaderboardsOnGameEnd()
 {
-	UShooterLocalPlayer* LocalPlayer = Cast<UShooterLocalPlayer>(Player);
-	if (LocalPlayer)
-	{
-		// update leaderboards - note this does not respect existing scores and overwrites them. We would first need to read the leaderboards if we wanted to do that.
-		IOnlineSubsystem* const OnlineSub = Online::GetSubsystem(GetWorld());
-		if (OnlineSub)
-		{
-			IOnlineIdentityPtr Identity = OnlineSub->GetIdentityInterface();
-			if (Identity.IsValid())
-			{
-				TSharedPtr<const FUniqueNetId> UserId = Identity->GetUniquePlayerId(LocalPlayer->GetControllerId());
-				if (UserId.IsValid())
-				{
-					IOnlineLeaderboardsPtr Leaderboards = OnlineSub->GetLeaderboardsInterface();
-					if (Leaderboards.IsValid())
-					{
-						AShooterPlayerState* ShooterPlayerState = Cast<AShooterPlayerState>(PlayerState);
-						if (ShooterPlayerState)
-						{
-							FShooterAllTimeMatchResultsWrite ResultsWriteObject;
-							int32 MatchWriteData = 1;
-							int32 KillsWriteData = ShooterPlayerState->GetKills();
-							int32 DeathsWriteData = ShooterPlayerState->GetDeaths();
-
-#if TRACK_STATS_LOCALLY
-							StatMatchesPlayed = (MatchWriteData += StatMatchesPlayed);
-							StatKills = (KillsWriteData += StatKills);
-							StatDeaths = (DeathsWriteData += StatDeaths);
-#endif
-
-							ResultsWriteObject.SetIntStat(LEADERBOARD_STAT_SCORE, KillsWriteData);
-							ResultsWriteObject.SetIntStat(LEADERBOARD_STAT_KILLS, KillsWriteData);
-							ResultsWriteObject.SetIntStat(LEADERBOARD_STAT_DEATHS, DeathsWriteData);
-							ResultsWriteObject.SetIntStat(LEADERBOARD_STAT_MATCHESPLAYED, MatchWriteData);
-
-							// the call will copy the user id and write object to its own memory
-							Leaderboards->WriteLeaderboards(ShooterPlayerState->SessionName, *UserId, ResultsWriteObject);
-							Leaderboards->FlushLeaderboards(TEXT("SHOOTERGAME"));
-						}
-					}
-				}
-			}
-		}
-	}
+//	UShooterLocalPlayer* LocalPlayer = Cast<UShooterLocalPlayer>(Player);
+//	if (LocalPlayer)
+//	{
+//		// update leaderboards - note this does not respect existing scores and overwrites them. We would first need to read the leaderboards if we wanted to do that.
+//		IOnlineSubsystem* const OnlineSub = Online::GetSubsystem(GetWorld());
+//		if (OnlineSub)
+//		{
+//			IOnlineIdentityPtr Identity = OnlineSub->GetIdentityInterface();
+//			if (Identity.IsValid())
+//			{
+//				TSharedPtr<const FUniqueNetId> UserId = Identity->GetUniquePlayerId(LocalPlayer->GetControllerId());
+//				if (UserId.IsValid())
+//				{
+//					IOnlineLeaderboardsPtr Leaderboards = OnlineSub->GetLeaderboardsInterface();
+//					if (Leaderboards.IsValid())
+//					{
+//						AShooterPlayerState* ShooterPlayerState = Cast<AShooterPlayerState>(PlayerState);
+//						if (ShooterPlayerState)
+//						{
+//							FShooterAllTimeMatchResultsWrite ResultsWriteObject;
+//							int32 MatchWriteData = 1;
+//							int32 KillsWriteData = ShooterPlayerState->GetKills();
+//							int32 DeathsWriteData = ShooterPlayerState->GetDeaths();
+//
+//#if TRACK_STATS_LOCALLY
+//							StatMatchesPlayed = (MatchWriteData += StatMatchesPlayed);
+//							StatKills = (KillsWriteData += StatKills);
+//							StatDeaths = (DeathsWriteData += StatDeaths);
+//#endif
+//
+//							ResultsWriteObject.SetIntStat(LEADERBOARD_STAT_SCORE, KillsWriteData);
+//							ResultsWriteObject.SetIntStat(LEADERBOARD_STAT_KILLS, KillsWriteData);
+//							ResultsWriteObject.SetIntStat(LEADERBOARD_STAT_DEATHS, DeathsWriteData);
+//							ResultsWriteObject.SetIntStat(LEADERBOARD_STAT_MATCHESPLAYED, MatchWriteData);
+//
+//							// the call will copy the user id and write object to its own memory
+//							Leaderboards->WriteLeaderboards(ShooterPlayerState->SessionName, *UserId, ResultsWriteObject);
+//							Leaderboards->FlushLeaderboards(TEXT("SHOOTERGAME"));
+//						}
+//					}
+//				}
+//			}
+//		}
+//	}
 }
 
 void AShooterPlayerController::UpdateStatsOnGameEnd(bool bIsWinner)
 {
-	const IOnlineStatsPtr Stats = Online::GetStatsInterface(GetWorld());
+	/*const IOnlineStatsPtr Stats = Online::GetStatsInterface(GetWorld());
 	ULocalPlayer* LocalPlayer = Cast<ULocalPlayer>(Player);
 	AShooterPlayerState* ShooterPlayerState = Cast<AShooterPlayerState>(PlayerState);
 
@@ -1378,43 +1378,43 @@ void AShooterPlayerController::UpdateStatsOnGameEnd(bool bIsWinner)
 
 			Stats->UpdateStats( UniqueId.GetUniqueNetId().ToSharedRef(), UpdatedUserStats, FOnlineStatsUpdateStatsComplete() );
 		}
-	}
+	}*/
 }
 
 
 void AShooterPlayerController::UpdateSaveFileOnGameEnd(bool bIsWinner)
 {
-	AShooterPlayerState* ShooterPlayerState = Cast<AShooterPlayerState>(PlayerState);
-	if (ShooterPlayerState)
-	{
-		// update local saved profile
-		UShooterPersistentUser* const PersistentUser = GetPersistentUser();
-		if (PersistentUser)
-		{
-			PersistentUser->AddMatchResult(ShooterPlayerState->GetKills(), ShooterPlayerState->GetDeaths(), ShooterPlayerState->GetNumBulletsFired(), ShooterPlayerState->GetNumRocketsFired(), bIsWinner);
-			PersistentUser->SaveIfDirty();
-		}
-	}
+	//AShooterPlayerState* ShooterPlayerState = Cast<AShooterPlayerState>(PlayerState);
+	//if (ShooterPlayerState)
+	//{
+	//	// update local saved profile
+	//	UShooterPersistentUser* const PersistentUser = GetPersistentUser();
+	//	if (PersistentUser)
+	//	{
+	//		PersistentUser->AddMatchResult(ShooterPlayerState->GetKills(), ShooterPlayerState->GetDeaths(), ShooterPlayerState->GetNumBulletsFired(), ShooterPlayerState->GetNumRocketsFired(), bIsWinner);
+	//		PersistentUser->SaveIfDirty();
+	//	}
+	//}
 }
 
 void AShooterPlayerController::PreClientTravel(const FString& PendingURL, ETravelType TravelType, bool bIsSeamlessTravel)
 {
 	Super::PreClientTravel( PendingURL, TravelType, bIsSeamlessTravel );
 
-	if (const UWorld* World = GetWorld())
-	{
-		UShooterGameViewportClient* ShooterViewport = Cast<UShooterGameViewportClient>( World->GetGameViewport() );
+	//if (const UWorld* World = GetWorld())
+	//{
+	//	UShooterGameViewportClient* ShooterViewport = Cast<UShooterGameViewportClient>( World->GetGameViewport() );
 
-		if ( ShooterViewport != NULL )
-		{
-			ShooterViewport->ShowLoadingScreen();
-		}
-		
-		AShooterHUD* ShooterHUD = Cast<AShooterHUD>(GetHUD());
-		if (ShooterHUD != nullptr)
-		{
-			// Passing true to bFocus here ensures that focus is returned to the game viewport.
-			ShooterHUD->ShowScoreboard(false, true);
-		}
-	}
+	//	if ( ShooterViewport != NULL )
+	//	{
+	//		ShooterViewport->ShowLoadingScreen();
+	//	}
+	//	
+	//	AShooterHUD* ShooterHUD = Cast<AShooterHUD>(GetHUD());
+	//	if (ShooterHUD != nullptr)
+	//	{
+	//		// Passing true to bFocus here ensures that focus is returned to the game viewport.
+	//		ShooterHUD->ShowScoreboard(false, true);
+	//	}
+	//}
 }
