@@ -262,7 +262,9 @@ class AShooterCharacter : public ACharacter
 	/** get max health */
 	int32 GetMaxHealth() const;
 
-	void SwitchCamera();
+	/** switch first or third person **/
+	UFUNCTION(BlueprintCallable, Category = Player)
+	void SwitchPersonView();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Player)
 	bool bFirstPerson;

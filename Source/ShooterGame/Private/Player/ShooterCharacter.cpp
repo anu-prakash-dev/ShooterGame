@@ -186,11 +186,17 @@ bool AShooterCharacter::IsEnemyFor(AController* TestPC) const
 
 void AShooterCharacter::UpdatePawnMeshes()
 {
-	Mesh1P->VisibilityBasedAnimTickOption = !bFirstPerson ? EVisibilityBasedAnimTickOption::OnlyTickPoseWhenRendered : EVisibilityBasedAnimTickOption::AlwaysTickPoseAndRefreshBones;
-	Mesh1P->SetOwnerNoSee(!bFirstPerson);
+	bool isFP = IsFirstPerson();
+	Mesh1P->VisibilityBasedAnimTickOption = !isFP ? EVisibilityBasedAnimTickOption::OnlyTickPoseWhenRendered : EVisibilityBasedAnimTickOption::AlwaysTickPoseAndRefreshBones;
+	Mesh1P->SetOwnerNoSee(!isFP);
 
-	GetMesh()->VisibilityBasedAnimTickOption = bFirstPerson ? EVisibilityBasedAnimTickOption::OnlyTickPoseWhenRendered : EVisibilityBasedAnimTickOption::AlwaysTickPoseAndRefreshBones;
-	GetMesh()->SetOwnerNoSee(bFirstPerson);
+	GetMesh()->VisibilityBasedAnimTickOption = isFP ? EVisibilityBasedAnimTickOption::OnlyTickPoseWhenRendered : EVisibilityBasedAnimTickOption::AlwaysTickPoseAndRefreshBones;
+	GetMesh()->SetOwnerNoSee(isFP);
+
+	if (CurrentWeapon)
+	{
+		CurrentWeapon->UpdateMeshes();
+	}
 }
 
 void AShooterCharacter::UpdateTeamColors(UMaterialInstanceDynamic* UseMID)
@@ -883,8 +889,6 @@ void AShooterCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerI
 	PlayerInputComponent->BindAction("Run", IE_Pressed, this, &AShooterCharacter::OnStartRunning);
 	PlayerInputComponent->BindAction("RunToggle", IE_Pressed, this, &AShooterCharacter::OnStartRunningToggle);
 	PlayerInputComponent->BindAction("Run", IE_Released, this, &AShooterCharacter::OnStopRunning);
-
-	PlayerInputComponent->BindAction("ToggleView", IE_Pressed, this, &AShooterCharacter::SwitchCamera);
 }
 
 
@@ -1284,7 +1288,7 @@ bool AShooterCharacter::IsFiring() const
 
 bool AShooterCharacter::IsFirstPerson() const
 {
-	return IsAlive() && Controller && Controller->IsLocalPlayerController();
+	return bFirstPerson; //IsAlive() && Controller && Controller->IsLocalPlayerController();
 }
 
 int32 AShooterCharacter::GetMaxHealth() const
@@ -1389,8 +1393,8 @@ void AShooterCharacter::BuildPauseReplicationCheckPoints(TArray<FVector>& Releva
 	RelevancyCheckPoints.Add(BoundingBox.Max);
 }
 
-void AShooterCharacter::SwitchCamera() 
+void AShooterCharacter::SwitchPersonView()
 { 
+	bFirstPerson = !bFirstPerson;
 	UpdatePawnMeshes();
-
 }   

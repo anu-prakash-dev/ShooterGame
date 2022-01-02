@@ -111,6 +111,9 @@ class AShooterWeapon : public AActor
 	/** consume a bullet */
 	void UseAmmo();
 
+	/** for correct switch between First and Third Person **/
+	void UpdateMeshes();
+
 	/** query ammo type */
 	virtual EAmmoType GetAmmoType() const
 	{

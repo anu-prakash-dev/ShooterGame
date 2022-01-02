@@ -105,6 +105,7 @@ void AShooterWeapon::OnEquip(const AShooterWeapon* LastWeapon)
 	if (MyPawn && MyPawn->IsLocallyControlled())
 	{
 		PlayWeaponSound(EquipSound);
+		UpdateMeshes();
 	}
 
 	AShooterCharacter::NotifyEquipWeapon.Broadcast(MyPawn, this);
@@ -215,6 +216,16 @@ void AShooterWeapon::DetachMeshFromPawn()
 
 	Mesh3P->DetachFromComponent(FDetachmentTransformRules::KeepRelativeTransform);
 	Mesh3P->SetHiddenInGame(true);
+}
+
+void AShooterWeapon::UpdateMeshes()
+{ 
+	if (MyPawn) 
+	{ 
+		const bool bFirstPerson = MyPawn->IsFirstPerson();
+		Mesh1P->SetOwnerNoSee(!bFirstPerson); 
+		Mesh3P->SetOwnerNoSee(bFirstPerson); 
+	} 
 }
 
 
