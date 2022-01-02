@@ -2,7 +2,8 @@
 
 Developed with Unreal Engine 4.26
 
-Based on: [Shooter Game by Epic Games](https://www.unrealengine.com/marketplace/en-US/product/shooter-game)
+Based on: [Shooter Game](https://www.unrealengine.com/marketplace/en-US/product/shooter-game) 
+</br>
 [Shooter Game Docs](https://docs.unrealengine.com/4.26/en-US/Resources/SampleGames/ShooterGame/)
 
 ![img](https://firebasestorage.googleapis.com/v0/b/personal-24c21.appspot.com/o/Projects%2FFirst.png?alt=media&token=fa716767-41c9-4882-8e6a-f9983edd7e82)
